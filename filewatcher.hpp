@@ -18,7 +18,8 @@
 #endif
 
 
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
+#include "dependencies/json/json.hpp"
 #include <chrono>
 
 using json = nlohmann::json;

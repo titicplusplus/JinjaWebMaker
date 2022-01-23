@@ -13,7 +13,8 @@
 #include <thread>
 
 #include <unordered_map>
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
+#include "dependencies/json/json.hpp"
 #include "filewatcher.hpp"
 
 //#include "dependencies/WebSocket/WebSocket.h"

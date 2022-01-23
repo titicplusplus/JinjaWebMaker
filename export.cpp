@@ -16,7 +16,8 @@
 #endif
 
 
-#include <nlohmann/json.hpp>
+//#include <nlohmann/json.hpp>
+#include "dependencies/json/json.hpp"
 #include <string>
 #include "dependencies/inja/inja.hpp"
 

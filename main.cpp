@@ -15,6 +15,7 @@ void help() {
 	std::cout << "Usage: webserver, help \n";
 	std::cout << "\tcreate NAME           -> to create a new project\n";
 	std::cout << "\tserver PORT(optional) -> to start the webserver\n";
+	std::cout << "\texport                -> to export the project\n";
 	std::cout << std::endl;
 }
 
@@ -27,6 +28,7 @@ int main(int argc, char **argv) {
 			std::signal(SIGINT, end_signal);
 			std::signal(SIGTERM, end_signal);
 
+			server.setup_file();
 			server.config_server(8000);
 			server.start();
 		} else if (strcmp(argv[1], "export") == 0) {
@@ -35,13 +37,13 @@ int main(int argc, char **argv) {
 			help();
 		}
 	} else if (argc == 3) {
-		std::cout << argv[1] << std::endl;
 		if (strcmp(argv[1], "create") == 0) {
 			Create c(argv[2]);
 		} else if (strcmp(argv[1], "server") == 0) {
 			std::signal(SIGINT, end_signal);
 			std::signal(SIGTERM, end_signal);
 
+			server.setup_file();
 			server.config_server(std::atoi(argv[2]));
 			server.start();
 

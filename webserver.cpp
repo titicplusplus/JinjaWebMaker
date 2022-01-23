@@ -19,7 +19,7 @@
 #endif
 
 WebServer::WebServer() {
-	setup_file();
+	//setup_file();
 
 	/**std::ifstream polling { "p.js" };
 
