@@ -29,7 +29,7 @@ int main(int argc, char **argv) {
 			std::signal(SIGTERM, end_signal);
 
 			server.setup_file();
-			server.config_server(8000);
+			server.config_server(8080);
 			server.start();
 		} else if (strcmp(argv[1], "export") == 0) {
 			Export();

@@ -42,6 +42,8 @@ std::string FileWatcher::new_modif() {
 		if (tfile != m_times[i]) {
 			m_times[i] = tfile;
 
+			std::cout << "File watcher detected: " << m_files[i] << std::endl;
+
 			return "true";
 		}
 	}
@@ -52,7 +54,7 @@ std::string FileWatcher::new_modif() {
 
 
 bool FileWatcher::json_change() {
-	std::size_t end = m_files.size()-1;
+	/**std::size_t end = m_files.size()-1;
 
 	const auto tfile { fs::last_write_time(m_files[end]) };
 
@@ -60,7 +62,7 @@ bool FileWatcher::json_change() {
 		m_times[end] = tfile;
 
 		return true;
-	}
+	}**/
 
 	return false;
 }

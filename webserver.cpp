@@ -32,7 +32,7 @@ WebServer::WebServer() {
 
 	polling.close();**/
 
-	polling_js = R"(<script type = "text/javascript">var polling = true;function reqListener () {if (this.responseText.length == 6) {window.location.reload();}}function delay(milliseconds){return new Promise(resolve => {setTimeout(resolve, milliseconds);});}async function Polling() {while (polling) {await delay(1000);var oReq = new XMLHttpRequest();oReq.addEventListener("load", reqListener);oReq.open("GET", "/new");oReq.contentType = "text/plain";oReq.send();}}Polling();</script>
+	polling_js = R"(<script type = "text/javascript">var polling = true;function reqListener () {if (this.responseText.length == 6) {window.location.reload();}}function delay(milliseconds){return new Promise(resolve => {setTimeout(resolve, milliseconds);});}async function Polling() {await delay(3000);while (polling) {await delay(1000);var oReq = new XMLHttpRequest();oReq.addEventListener("load", reqListener);oReq.open("GET", "/new");oReq.contentType = "text/plain";oReq.send();}}Polling();</script>
 	)";
 
 	error404 = "<html><head><title>Error: 404</title>" + polling_js + "</head><body><h1>Error: 404</h1></body></html>";
@@ -46,6 +46,7 @@ void WebServer::setup_file() {
 	std::vector<std::string> includes_file { file.load(data) };
 
 	for (const auto& file: includes_file) {
+		std::cout << file << std::endl;
 		inja::Template temp = env.parse_template("includes/" + file);
 		env.include_template(file, temp);
 	}
@@ -84,12 +85,7 @@ void WebServer::start() {
 		return;
 	}
 
-	/**std::async(std::launch::async, [this] {
-		this->webSocket.wait_client();
-	});**/
-
 	thread_ptr = std::unique_ptr<std::thread>(new std::thread(&WebSocket::wait_client, &webSocket));
-
 
 	while (is_alive && (new_socket = accept(server_fd, (struct sockaddr *)&addr, (socklen_t*)&addrlen))) {
 		if (new_socket > 0) {
@@ -134,6 +130,10 @@ void WebServer::new_http_request(int port) {
 		}
 		else {
 			content = file.new_modif();
+
+			if (content == "true") {
+				setup_file();
+			}
 		}
 	} else {
 		content = open_file(value[1].substr(1));

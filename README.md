@@ -1,6 +1,6 @@
-# WebMakerJinja
+# JinjaWebMaker
 
-WebMakerJinja is a web server that allows you to render jinja-like templates inside your html/css/js web pages.
+JinjaWebMaker is a web server that allows you to render jinja-like templates inside your html/css/js web pages.
 
 # Functionalities
 
@@ -11,19 +11,19 @@ WebMakerJinja is a web server that allows you to render jinja-like templates ins
 # Installation
 
 ```bash
-git clone https://github.com/titicplusplus/WebMakerJinja.git
-cd WebMakerJinja
+git clone https://github.com/titicplusplus/JinjaWebMaker.git
+cd JinjaWebMaker
 cmake .
 make
 sudo make install
 ```
 
-# How to use WebMakerJinja
+# How to use JinjaWebMaker
 
 ## To create a new project, you need to run:
 
 ```bash
-WebMakerJinja create ExampleOfName #That will create a directory with all the files
+JinjaWebMaker create ExampleOfName #That will create a directory with all the files
 cd ExampleOfName
 ```
 
@@ -34,14 +34,14 @@ And with your favor editor, you can open the index.jinja2.html, styles/style.jin
 To start the web server, you need to run:
 
 ```bash
-WebMakerJinja server 8080 #the port is optional
+JinjaWebMaker server 8080 #the port is optional
 ```
 
 Then, open your browser and write : [https://127.0.0.1:8080](https://127.0.0.1:8080)
 
 ## Use the powerfull templates jinja2
 
-- See jinja2 [documentation](https://jinja2docs.readthedocs.io/en/stable/templates.html), the most part of the documentation is compitle with WebMakerJinja.
+- See jinja2 [documentation](https://jinja2docs.readthedocs.io/en/stable/templates.html), the most part of the documentation is compitle with JinjaWebMaker.
 
 - To create global variables, you just need to add the variables in the data.json file like that:
 - To add a jinja2 file, you need to add it the 'files' part on the data.json, your file name need to have '.jinja2' before the extension's name.
@@ -73,7 +73,7 @@ Then, open your browser and write : [https://127.0.0.1:8080](https://127.0.0.1:8
 To export the project, you can use the command (on the directory):
 
 ```bash
-WebMakerJinja export
+JinjaWebMaker export
 ```
 
 All the *.jinja2* files will be transformed and rename without the *.jinja2*
