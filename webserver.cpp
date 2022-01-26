@@ -46,9 +46,24 @@ void WebServer::setup_file() {
 	std::vector<std::string> includes_file { file.load(data) };
 
 	for (const auto& file: includes_file) {
-		std::cout << file << std::endl;
-		inja::Template temp = env.parse_template("includes/" + file);
-		env.include_template(file, temp);
+		includes_files.push_back("includes/" + file);
+		includes_temp.push_back(env.parse_template("includes/" + file));
+		env.include_template(file, includes_temp[includes_file.size() -1]);
+	}
+}
+
+void WebServer::reload_file(std::string file_name) {
+	if (file_name == "data.json") {
+		setup_file();
+	} else if (file_name.find("includes/") != std::string::npos) {
+		
+		for (std::size_t i {0}; i < includes_files.size(); i++) {
+			if (includes_files[i] == file_name) {
+				includes_temp[i] = env.parse_template(includes_files[i]);
+				env.include_template(file_name.substr(9), includes_temp[i]);
+				break;
+			}
+		}
 	}
 }
 
@@ -96,6 +111,7 @@ void WebServer::start() {
 	}
 }
 
+
 void WebServer::new_http_request(int port) {
 	char buffer[1024] = {0};
 	int valread = read(port, buffer, 1024);
@@ -126,13 +142,14 @@ void WebServer::new_http_request(int port) {
 		if (file.json_change()) {
 			content = "true";
 
-			setup_file();
+			this->setup_file();
 		}
 		else {
 			content = file.new_modif();
 
-			if (content == "true") {
-				setup_file();
+			if (content != "") {
+				reload_file(content);
+				content = "true";
 			}
 		}
 	} else {
@@ -162,6 +179,8 @@ void WebServer::new_http_request(int port) {
 		send( port, rep.c_str(), rep.size(), 0 );
 	}
 }
+
+
 
 std::string WebServer::open_file(std::string filename) {
 	if (fs::exists(filename)) {

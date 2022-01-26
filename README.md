@@ -76,13 +76,13 @@ To export the project, you can use the command (on the directory):
 JinjaWebMaker export
 ```
 
-All the *.jinja2* files will be transformed and rename without the *.jinja2*
+All the .jinja2 files will be transformed and rename without the .jinja2
 
 That's it !
 
 # Todo list
 
-- Improve the default files when creating the project to understand how works jinja2.
+- Improve the default files when creating the project to understand how works jinja2 for a new user.
 - Change the polling to web socket.
 - A better management of the user's error.
 

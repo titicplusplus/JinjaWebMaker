@@ -44,12 +44,12 @@ std::string FileWatcher::new_modif() {
 
 			std::cout << "File watcher detected: " << m_files[i] << std::endl;
 
-			return "true";
+			return m_files[i];
 		}
 	}
 
 
-	return "false";
+	return "";
 }
 
 
