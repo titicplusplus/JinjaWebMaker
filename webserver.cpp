@@ -1,4 +1,5 @@
 #include "webserver.hpp"
+#include <sstream>
 #include <future>
 #include <thread>
 #include <fstream>
@@ -32,7 +33,7 @@ WebServer::WebServer() {
 
 	polling.close();**/
 
-	polling_js = R"(<script type = "text/javascript">var polling = true;function reqListener () {if (this.responseText.length == 6) {window.location.reload();}}function delay(milliseconds){return new Promise(resolve => {setTimeout(resolve, milliseconds);});}async function Polling() {await delay(3000);while (polling) {await delay(1000);var oReq = new XMLHttpRequest();oReq.addEventListener("load", reqListener);oReq.open("GET", "/new");oReq.contentType = "text/plain";oReq.send();}}Polling();</script>
+	polling_js = R"(<script type = "text/javascript">var polling = true;function reqListener () {if (this.responseText.length == 4) {window.location.reload();}}function delay(milliseconds){return new Promise(resolve => {setTimeout(resolve, milliseconds);});}async function Polling() {await delay(3000);while (polling) {await delay(1000);var oReq = new XMLHttpRequest();oReq.addEventListener("load", reqListener);oReq.open("GET", "/new");oReq.contentType = "text/plain";oReq.send();}}Polling();</script>
 	)";
 
 	error404 = "<html><head><title>Error: 404</title>" + polling_js + "</head><body><h1>Error: 404</h1></body></html>";
@@ -48,7 +49,8 @@ void WebServer::setup_file() {
 	for (const auto& file: includes_file) {
 		includes_files.push_back("includes/" + file);
 		includes_temp.push_back(env.parse_template("includes/" + file));
-		env.include_template(file, includes_temp[includes_file.size() -1]);
+
+		env.include_template(file, includes_temp[includes_temp.size() -1]);
 	}
 }
 
@@ -77,7 +79,7 @@ void WebServer::config_server(int port) {
 	}
 	std::cout << "Server listening on http://127.0.0.1:" << port << std::endl;
 
-	webSocket.config_server(port+1);
+	//webSocket.config_server(port+1);
 }
 
 void WebServer::start() {
@@ -100,7 +102,7 @@ void WebServer::start() {
 		return;
 	}
 
-	thread_ptr = std::unique_ptr<std::thread>(new std::thread(&WebSocket::wait_client, &webSocket));
+	//thread_ptr = std::unique_ptr<std::thread>(new std::thread(&WebSocket::wait_client, &webSocket));
 
 	while (is_alive && (new_socket = accept(server_fd, (struct sockaddr *)&addr, (socklen_t*)&addrlen))) {
 		if (new_socket > 0) {
@@ -174,7 +176,7 @@ void WebServer::new_http_request(int port) {
 		send( port, rep.c_str(), rep.size(), 0 );
 	} else {
 		std::string rep = "HTTP/1.0 200 OK\r\nContent-Length: " +  
-			std::to_string(content.size()) + "\r\n" + content_type(value[1]) + "\r\n\r\n" + content;
+			std::to_string(content.size()) + "\r\n" + content_type(value[1]) + "\r\n" + content;
 
 		send( port, rep.c_str(), rep.size(), 0 );
 	}
@@ -199,6 +201,9 @@ std::string WebServer::open_file(std::string filename) {
 
 			if (file) {
 				std::string line { "" };
+				
+				/**std::string html { (std::istreambuf_iterator<char>(file) ),
+                       				(std::istreambuf_iterator<char>()    ) };**/
 				std::string html { "" };
 
 				while (std::getline(file, line)) {
@@ -241,6 +246,8 @@ std::string WebServer::content_type(std::string &filename) {
 		return "content-type: text/javascript; charset=utf-8\r\n";
 	} else if (ext == "css") {
 		return "content-type: text/css; charset=utf-8\r\n";
+	} else if (ext == "png") {
+		return "content-type image/png;\r\n";
 	}
 
 	return "content-type: text/plain; charset=utf-8\r\n";
@@ -340,13 +347,13 @@ std::unordered_map<std::string, std::string> WebServer::get_params(std::string &
 }
 
 void WebServer::stop(int /*signal*/) {
-	webSocket.stop();
+	//webSocket.stop();
 
 	shutdown(server_fd, SHUT_RD);
 	is_alive = false;
 
 	std::cout << "end server" << std::endl;
-	thread_ptr->join();
+	//thread_ptr->join();
 }
 
 WebServer::~WebServer() {}
